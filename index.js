@@ -1,43 +1,181 @@
-const express = require ('express');
-const morgan = require ('morgan');
+const express = require('express');
 const app = express();
-
-//serve documentation.html from public folder
 app.use(express.static('public'));
+app.use(express.json());
 
-// Morgan's console.log
-app.use(morgan('common'));
-
-let topMovies = [ {
-  title : 'Lord of the Rings: The Fellowship of the Ring',
+const Movies = [{
+  title: 'Lord of the Rings: The Fellowship of the Ring',
+  description: 'The Lord of the Rings is a trilogy of films about 9 men on a quest to destroy a powerful ring.',
+  genre: 'Fantasy-fiction',
+  director: 'Peter Jackson',
+  slug: 'lord-of-the-rings',
+  imageURL: '#',
 },
 {
-  title : 'Harry Potter and the Prisoner of Azkaban',
+  title: 'Harry Potter and the Prisoner of Azkaban',
+  description: 'In the third film of the series, Harry Potter meets a very important family member.',
+  genre: 'Fantasy/Drama',
+  director: 'Alfonso Cuaron',
+  slug: 'harry-potter-and-the-prisoner-of-azkaban',
+  imageURL: '#',
 },
 {
-  title : 'Gladiator'
+  title: 'Gladiator',
+  description: 'An ex army general looses everything, but can he rise to the top of the Gladiator circle?',
+  genre: 'Action',
+  director: 'Ridley Scott',
+  slug: 'gladiator',
+  imageURL: '#',
 },
 {
-  title : '10 Things I Hate About You'
-}
-]
+  title: '10 Things I Hate About You',
+  description: 'A 1999 American romantic comedy about a bittersweet romance.',
+  genre: 'Romance/Teen',
+  director: 'Gil Junger',
+  slug: '10-things-i-hate-about-you',
+  imageURL: '#',
+},
+{
+  title: 'Legally Blonde',
+  description: 'A comedy following Elle Woods who has it all, but can she prove everyone wrong by becoming a top lawyer?',
+  genre: 'Comedy/Romance',
+  director: 'Robert Luketic',
+  slug: 'legally-blonde',
+  imageURL: '#',
+},
+{
+  title: 'Paranormal Activity',
+  description: 'A family haunted by a paranormal being in their home - will they be able to survive?',
+  genre: 'Horror/Thriller',
+  director: 'Oren Peli',
+  slug: 'paranormal-activity',
+  imageURL: '#',
+},
+];
 
 
-//Get Requests
-app.get('/movies', function(req, res) {
-  res.json(topMovies)
+const Users = [{
+  name: 'Sophie',
+  username: 'SophieLamb',
+  email: 'sophie@test.com',
+  password: 'sophie123',
+  dateOfBirth: '23/08/1995',
+  favourites: [],
+},
+{
+  name: 'Elaine',
+  username: 'ElaineLamb',
+  email: 'elaine@test.com',
+  password: 'elaine123',
+  dateOfBirth: '05/10/1962',
+  favourites: [],
+},
+];
+// Get Requests
+// returns list of all movies to the user
+app.get('/movies', (req, res) => {
+  res.json(Movies);
 });
-app.get('/', function(req, res){
-  res.send('Welcome to my top movie selection!')
+
+
+app.get('/movies/:title', (req, res) => {
+  // console.log(req.params.title);
+  const { title } = req.params;
+  // console.log(req.query.title);
+  const movies = Movies.filter(movie => movie.slug === title.toLowerCase());
+  console.log(movies);
+  res.json(movies);
 });
 
-app.use(function (err,req,res,next) {
+// returns list of one movie
+// app.get('/movies/:title', (req, res) => {
+//   const movies = Movies.find(movie => movie.slug === req.params.title.toLowerCase());
+//   res.json(movies);
+// });
+
+// data about genre by title
+app.get('/movies/:title/genre', (req, res) => {
+  const selectedMovie = Movies.find(movie => movie.title.toLowerCase() === req.params.title.toLowerCase());
+  if (selectedMovie) {
+    res.status(200).send(`The genre of ${selectedMovie.title} is ${selectedMovie.genre}`);
+  } else {
+    res.status(404).send(`Movie of the title ${req.params.title}was not found! Please try again.`);
+  }
+});
+
+
+// info about director by name
+app.get('/movies/:director', (req, res) => {
+  res.send({data: 'return the directors DOB, bio and description.'});
+});
+
+
+
+// Allow new user to register
+// app.post('/users', (req, res) => {
+//   const {newUser} = req.body;
+//
+//   if (!newUser.name) {
+//     const message = 'Username is missing';
+//     res.status(400).send(message);
+//   } else {
+//     Users.push(newUser);
+//     res.status(201).send(newUser);
+//   }
+// });
+
+app.post('/users/', (req, res) => {
+  res.send({
+    name: 'Elaine',
+    username: 'ElaineLamb',
+    email: 'elaine@test.com',
+    password: 'elaine123',
+    dateOfBirth: '05/10/1962',
+    favourites: [],
+  });
+});
+
+
+// updating username/password
+app.put('/users/:username', (req, res) => {
+  res.send({data: 'Your username was updated successfully!'});
+});
+
+// updating user information
+app.put('/users/:dateofbirth/:emailpreferences', (req, res) => {
+  res.send('Your information was successfully updated');
+});
+
+// user adding movie to favourites
+app.post('/users/:username/favourites', (req, res) => {
+  // const {newFavourite} = req.body;
+  // console.log(req.body);
+  // if (!newFavourite) {
+  //   const message = 'Movie title is missing';
+  //   res.status(400).send(message);
+  // } else {
+    res.send({message: 'The following movie was added to your Favourites!',
+              title: 'Paranormal Activity',
+              description: 'A family haunted by a paranormal being in their home - will they be able to survive?',
+              genre: 'Horror/Thriller',
+              director: 'Oren Peli'});
+    // const user = Users.find(res => Users.username === req.params.username);
+    // Users.favourites.push(newFavourite);
+    // res.status(201).send(Users.favourites);
+});
+// removing movie from favourites
+app.delete('/users/:username/favourites', (req, res) => {
+  res.send({data: 'Movie was removed from your favourites.'});
+});
+
+// deregiserting a user
+app.delete('/users/:username', (req, res) => {
+  res.send({data: 'Your account has been successfullly deleted.'});
+});
+
+app.use((err, req, res, next) => {
   console.error(err.stack);
   res.status(500).send('Oops! Looks like something has gone wrong!');
 });
-
-
 // listening for requests
-app.listen(8080, () =>
-  console.log('Your app is listening on port 8080.')
-);
+app.listen(8080, () => console.log('Your app is listening on port 8080.'));
