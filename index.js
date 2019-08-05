@@ -130,7 +130,7 @@ app.get('/movies/:Title', function (req,res) {
 // });
 
 // return data about a genre (description) by name (eg Thriller) using mongoose
-app.get('/movies/:Genre', function(req,res) {
+app.get('/movies/genre/:Genre', function(req,res) {
   Movies.findOne({'Genre.Name': req.params.Genre})
   .then(function(genre){
     res.json(genre)
@@ -148,8 +148,8 @@ app.get('/movies/:Genre', function(req,res) {
 // });
 
 //Return data about directors
-app.get('/movies/:Director', function(req,res) {
-  Movies.findOne({Director: req.params.Director})
+app.get('/movies/director/:Director', function(req,res) {
+  Movies.findOne({'Director.Name': req.params.Director})
   .then(function(director){
     res.json(director)
   })
@@ -160,67 +160,121 @@ app.get('/movies/:Director', function(req,res) {
 });
 
 
-// Allow new user to register
-// app.post('/users', (req, res) => {
-//   const {newUser} = req.body;
-//
-//   if (!newUser.name) {
-//     const message = 'Username is missing';
-//     res.status(400).send(message);
-//   } else {
-//     Users.push(newUser);
-//     res.status(201).send(newUser);
-//   }
+// Allow new user to register * OLD CODE *
+// app.post('/users/', (req, res) => {
+//   res.send({
+//     name: 'Elaine',
+//     username: 'ElaineLamb',
+//     email: 'elaine@test.com',
+//     password: 'elaine123',
+//     dateOfBirth: '05/10/1962',
+//     favourites: [],
+//   });
 // });
 
-app.post('/users/', (req, res) => {
-  res.send({
-    name: 'Elaine',
-    username: 'ElaineLamb',
-    email: 'elaine@test.com',
-    password: 'elaine123',
-    dateOfBirth: '05/10/1962',
-    favourites: [],
+//Add a user
+app.post('/users', function(req, res) {
+  Users.findOne({ Username : req.body.Username })
+  .then(function(user) {
+    if (user) {
+      return res.status(400).send(req.body.Username + "already exists");
+    } else {
+      Users
+      .create({
+        Username: req.body.Username,
+        Password: req.body.Password,
+        Email: req.body.Email,
+        Birthday: req.body.Birthday
+      })
+      .then(function(user) {res.status(201).json(user) })
+      .catch(function(error) {
+        console.error(error);
+        res.status(500).send("Error: " + error);
+      })
+    }
+  }).catch(function(error) {
+    console.error(error);
+    res.status(500).send("Error: " + error);
   });
 });
 
 
 // updating username/password
-app.put('/users/:username', (req, res) => {
-  res.send({data: 'Your username was updated successfully!'});
+
+// * OLD CODE * //
+// app.put('/users/:username', (req, res) => {
+//   res.send({data: 'Your username was updated successfully!'});
+// });
+
+//mongoose
+app.put('/users/:Username', function (req, res) {
+  Users.findOneAndUpdate({Username: req.params.Username},{$set : {
+    Username: req.body.Username,
+    Password: req.body.Password,
+    Email: req.body.Email,
+    Birthday: req.body.Birthday
+  }},
+  { new : true},
+  function (err, updatedUser) {
+    if(err) {
+      console.error(err);
+      res.status(500).send("Error: "+err);
+    }else {
+      res.json(updatedUser)
+    }
+  })
 });
 
-// updating user information
-app.put('/users/:dateofbirth/:emailpreferences', (req, res) => {
-  res.send('Your information was successfully updated');
-});
 
 // user adding movie to favourites
-app.post('/users/:username/favourites', (req, res) => {
-  // const {newFavourite} = req.body;
-  // console.log(req.body);
-  // if (!newFavourite) {
-  //   const message = 'Movie title is missing';
-  //   res.status(400).send(message);
-  // } else {
-    res.send({message: 'The following movie was added to your Favourites!',
-              title: 'Paranormal Activity',
-              description: 'A family haunted by a paranormal being in their home - will they be able to survive?',
-              genre: 'Horror/Thriller',
-              director: 'Oren Peli'});
-    // const user = Users.find(res => Users.username === req.params.username);
-    // Users.favourites.push(newFavourite);
-    // res.status(201).send(Users.favourites);
-});
-// removing movie from favourites
-app.delete('/users/:username/favourites', (req, res) => {
-  res.send({data: 'Movie was removed from your favourites.'});
+app.post('/users/:Username/Movies/:MovieID', function (req,res){
+  Users.findOneAndUpdate({ Username: req.params.Username},{
+    $push: { Favourites: req.params.MovieID}
+  },
+  { new : true}, function (err, updatedUser) {
+    if(err) {
+      console.error(err);
+      res.status(500).send("Error: " + err);
+    } else {
+      res.json(updatedUser)
+    }
+  })
 });
 
-// deregiserting a user
-app.delete('/users/:username', (req, res) => {
-  res.send({data: 'Your account has been successfullly deleted.'});
+
+// removing movie from favourites
+//mongoose
+app.delete('/users/:Username/Movies/:MovieID', function(req,res) {
+  Users.findOneAndRemove ({ Username: req.params.Username})
+  .then(item => {
+    res.json(item)
+  })
+  .catch(err => {
+    console.error(err);
+    res.status(500).send("Error: " + err);
+  })
 });
+
+
+
+// deregiserting a user by username
+//mongoose
+app.delete('/users/:Username', function(req,res) {
+  Users.findOneAndRemove ({ Username: req.params.Username})
+  .then(function(user) {
+    if(!user) {
+      res.status(400).send(req.params.Username + " was not found");
+    } else {
+      res.status(200).send(req.params.Username + " was deleted.");
+    }
+  })
+  .catch(function(err) {
+    console.error(err);
+    res.status(500).send("Error: " + err);
+  });
+});
+
+
 
 app.use((err, req, res, next) => {
   console.error(err.stack);
