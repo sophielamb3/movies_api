@@ -14,6 +14,23 @@ const passport = require('passport');
 require('./passport')
 var auth = require('./auth')(app);
 
+const cors = require('cors');
+var allowedOrigins = ['http://localhost:8080', 'http://testsite.com'];
+app.use(cors({
+  origin: function(origin, callback){
+    if(!origin) return callback (null,true);
+    if(allowedOrigins.indexOf(origin)=== -1){
+      var message = 'The CORS policy for this application doesnt allow access from origin' + origin;
+      return callback (new Error(message ), false);
+    }
+    return callback(null,true);
+  }
+}));
+
+const validator = require('express-validator');
+app.use(validator());
+
+
 //return list of all movies using mongoose
 app.get('/movies', passport.authenticate('jwt', {session: false}), function(req,res){
   Movies.find()
@@ -73,6 +90,20 @@ app.get('/movies/director/:Director', passport.authenticate('jwt', {session: fal
 
 //Add a user - allow user to register
 app.post('/users', passport.authenticate('jwt', {session: false}), function(req, res) {
+  // Validation logic here
+  req.checkBody('Username', 'Username is required').notEmpty();
+  req.checkBody('Username', 'Username contains non alphanumeric characters - not allowed.').isAlphanumeric();
+  req.checkBody('Password', 'Password is required').notEmpty();
+  req.checkBody('Email', 'Email is required').notEmpty();
+  req.checkBody('Email', 'Email does not appear to be valid').isEmail();
+
+  // check validation object for errors
+  var errors = req.validationErrors();
+  if (errors) {
+    return res.status(422).json({errors: errors});
+  }
+
+  var hashedPassword = Users.hashPassword(req.body.Password);
   Users.findOne({ Username : req.body.Username })
   .then(function(user) {
     if (user) {
@@ -81,7 +112,7 @@ app.post('/users', passport.authenticate('jwt', {session: false}), function(req,
       Users
       .create({
         Username: req.body.Username,
-        Password: req.body.Password,
+        Password: hashedPassword,
         Email: req.body.Email,
         Birthday: req.body.Birthday
       })
@@ -100,13 +131,21 @@ app.post('/users', passport.authenticate('jwt', {session: false}), function(req,
 
 // updating username/password
 
-// * OLD CODE * //
-// app.put('/users/:username', (req, res) => {
-//   res.send({data: 'Your username was updated successfully!'});
-// });
-
 //mongoose
 app.put('/users/:Username',passport.authenticate('jwt', {session: false}), function (req, res) {
+  // Validation logic here
+  req.checkBody('Username', 'Username is required').notEmpty();
+  req.checkBody('Username', 'Username contains non alphanumeric characters - not allowed.').isAlphanumeric();
+  req.checkBody('Password', 'Password is required').notEmpty();
+  req.checkBody('Email', 'Email is required').notEmpty();
+  req.checkBody('Email', 'Email does not appear to be valid').isEmail();
+
+  // check validation object for errors
+  var errors = req.validationErrors();
+  if (errors) {
+    return res.status(422).json({errors: errors});
+  }
+
   Users.findOneAndUpdate({Username: req.params.Username},{$set : {
     Username: req.body.Username,
     Password: req.body.Password,
@@ -127,6 +166,19 @@ app.put('/users/:Username',passport.authenticate('jwt', {session: false}), funct
 
 // user adding movie to favourites
 app.post('/users/:Username/Movies/:MovieID', passport.authenticate('jwt', {session: false}), function (req,res){
+  // Validation logic here
+  req.checkBody('Username', 'Username is required').notEmpty();
+  req.checkBody('Username', 'Username contains non alphanumeric characters - not allowed.').isAlphanumeric();
+  req.checkBody('Password', 'Password is required').notEmpty();
+  req.checkBody('Email', 'Email is required').notEmpty();
+  req.checkBody('Email', 'Email does not appear to be valid').isEmail();
+
+  // check validation object for errors
+  var errors = req.validationErrors();
+  if (errors) {
+    return res.status(422).json({errors: errors});
+  }
+
   Users.findOneAndUpdate({ Username: req.params.Username},{
     $push: { Favourites: req.params.MovieID}
   },
@@ -144,6 +196,19 @@ app.post('/users/:Username/Movies/:MovieID', passport.authenticate('jwt', {sessi
 // removing movie from favourites
 //mongoose
 app.delete('/users/:Username/Movies/:MovieID',passport.authenticate('jwt', {session: false}), function(req,res) {
+  // Validation logic here
+  req.checkBody('Username', 'Username is required').notEmpty();
+  req.checkBody('Username', 'Username contains non alphanumeric characters - not allowed.').isAlphanumeric();
+  req.checkBody('Password', 'Password is required').notEmpty();
+  req.checkBody('Email', 'Email is required').notEmpty();
+  req.checkBody('Email', 'Email does not appear to be valid').isEmail();
+
+  // check validation object for errors
+  var errors = req.validationErrors();
+  if (errors) {
+    return res.status(422).json({errors: errors});
+  }
+
   Users.findOneAndRemove ({ Username: req.params.Username})
   .then(item => {
     res.json(item)
@@ -179,5 +244,10 @@ app.use((err, req, res, next) => {
   console.error(err.stack);
   res.status(500).send('Oops! Looks like something has gone wrong!');
 });
+
 // listening for requests
-app.listen(8080, () => console.log('Your app is listening on port 8080.'));
+// app.listen(8080, () => console.log('Your app is listening on port 8080.'));
+var port = process.env.PORT || 3000;
+app.listen(port, "0.0.0.0", function(){
+  console.log("Listening on Port 3000");
+});
