@@ -86,6 +86,7 @@ app.get('/movies/director/:Director', passport.authenticate('jwt', {session: fal
 });
 
 
+const { check, validationResult } = require('express-validator');
 
 
 //Add a user - allow user to register
