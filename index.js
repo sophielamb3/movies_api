@@ -27,9 +27,7 @@ app.use(cors({
   }
 }));
 
-const validator = require('express-validator');
-app.use(validator());
-
+const {check, validationResult} = require('express-validator');
 
 //return list of all movies using mongoose
 app.get('/movies', passport.authenticate('jwt', {session: false}), function(req,res){
@@ -86,7 +84,6 @@ app.get('/movies/director/:Director', passport.authenticate('jwt', {session: fal
 });
 
 
-const { check, validationResult } = require('express-validator');
 
 
 //Add a user - allow user to register
