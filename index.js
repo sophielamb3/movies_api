@@ -9,7 +9,7 @@ const Models = require('./models.js');
 const Movies = Models.Movie;
 const Users = Models.User;
 //mongoose.connect('mongodb://localhost:27017/test', {useNewUrlParser: true});
-mongoose.connect('mongodb+srv://myFlix_admin:Chloe2001!@cluster0-ylwma.mongodb.net/test?retryWrites=true', {useNewUrlParser: true});
+mongoose.connect('mongodb+srv://myFlix_admin:Chloe2001!@cluster0-ylwma.mongodb.net/test?retryWrites=true&w=majority', {useNewUrlParser: true});
 
 
 const passport = require('passport');
@@ -32,7 +32,7 @@ app.use(cors({
 const {check, validationResult} = require('express-validator');
 
 //return list of all movies using mongoose
-app.get('/movies', passport.authenticate('jwt', {session: false}), function(req,res){
+app.get('/movies', function(req,res){
   Movies.find()
   .then(function(movies){
     res.status(201).json(movies)
