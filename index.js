@@ -9,7 +9,7 @@ const Models = require('./models.js');
 const Movies = Models.Movie;
 const Users = Models.User;
 // mongoose.connect('mongodb://localhost:27017/test', {useNewUrlParser: true});
-mongoose.connect('mongodb+srv://myFlix_admin:Chloe2001!@cluster0-ylwma.mongodb.net/test?retryWrites=true&w=majority', {useNewUrlParser: true});
+mongoose.connect('mongodb+srv://myFlix_admin:Chloe2001!@cluster0-ylwma.mongodb.net/test?retryWrites=true', {useNewUrlParser: true});
 
 
 const passport = require('passport');
