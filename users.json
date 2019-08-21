@@ -1,0 +1,4 @@
+{"_id":{"$oid":"5d4331decd246cbadc4af2b4"},"Username":"Sophie Lamb","Password":"Sophie123","Email":"sophie@test.com","Birthday":"23/08/1995","Favourites":[{"$oid":"5d432c4ecd246cbadc4af2af"},{"$oid":"5d432824cd246cbadc4af2ac"}]}
+{"_id":{"$oid":"5d433239cd246cbadc4af2b5"},"Username":"Elaine Lamb","Password":"Elaine123","Email":"elaine@test.com","Birthday":"05/10/1962","Favourites":[{"$oid":"5d432ccdcd246cbadc4af2b0"}]}
+{"_id":{"$oid":"5d4332e6cd246cbadc4af2b7"},"Username":"Chrissy Lamb","Password":"Chrissy123","Email":"chrissy@test.com","Birthday":"27/06/1993","Favourites":[{"$oid":"5d432824cd246cbadc4af2ac"}]}
+{"_id":{"$oid":"5d43332ecd246cbadc4af2b8"},"Username":"Jamie Urquhart","Password":"Jamie123","Email":"jamie@test.com","Birthday":"07/03/1993","Favourites":[{"$oid":"5d432e3ccd246cbadc4af2b1"}]}
