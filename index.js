@@ -87,7 +87,7 @@ app.get('/movies/director/:Director', passport.authenticate('jwt', {session: fal
 
 
 //Add a user - allow user to register
-app.post('/users', passport.authenticate('jwt', {session: false}), function(req, res) {
+app.post('/users', function(req, res) {
   // Validation logic here
   req.checkBody('Username', 'Username is required').notEmpty();
   req.checkBody('Username', 'Username contains non alphanumeric characters - not allowed.').isAlphanumeric();
