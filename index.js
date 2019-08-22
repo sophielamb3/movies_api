@@ -1,26 +1,24 @@
 const express = require('express');
 const app = express();
+app.use(express.static('public'));
+app.use(express.json());
+
 const mongoose = require('mongoose');
 const Models = require('./models.js');
-const passport = require('passport');
 
 const Movies = Models.Movie;
 const Users = Models.User;
 
-app.use(express.static('public'));
-app.use(express.json());
-
-
 // connect to local DB
 //mongoose.connect('mongodb://localhost:27017/test', {useNewUrlParser: true});
 
-// connect to online DB
+// connect to online
 mongoose.connect('mongodb+srv://myFlix_admin:Chloe2001!@cluster0-ylwma.mongodb.net/test?retryWrites=true&w=majority', {useNewUrlParser: true});
 
 
+const passport = require('passport');
 require('./passport')
-require('./server/auth.js')(app);
-
+var auth = require('./auth')(app);
 
 const cors = require('cors');
 var allowedOrigins = ['http://localhost:8080', 'http://testsite.com'];
@@ -104,24 +102,25 @@ app.post('/users', function(req, res) {
   req.checkBody('Email', 'Email does not appear to be valid').isEmail();
 
   // check validation object for errors
-  const errors = req.validationErrors();
+  var errors = req.validationErrors();
   if (errors) {
     return res.status(422).json({errors: errors});
   }
 
-  const hashedPassword = Users.hashPassword(req.body.Password);
+  var hashedPassword = Users.hashPassword(req.body.Password);
   Users.findOne({ Username : req.body.Username })
   .then(function(user) {
     if (user) {
       return res.status(400).send(req.body.Username + "already exists");
     } else {
-      Users.create({
+      Users
+      .create({
         Username: req.body.Username,
         Password: hashedPassword,
         Email: req.body.Email,
         Birthday: req.body.Birthday
       })
-      .then(function(userAdded) {res.status(201).json(userAdded) })
+      .then(function(user) {res.status(201).json(user) })
       .catch(function(error) {
         console.error(error);
         res.status(500).send("Error: " + error);
