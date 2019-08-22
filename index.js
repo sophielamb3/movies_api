@@ -50,7 +50,7 @@ app.get('/movies', function(req,res){
 
 
 // get movies by title using mongoose
-app.get('/movies/:Title', passport.authenticate('jwt', {session: false}), function (req,res) {
+app.get('/movies/:Title', function (req,res) {
   Movies.findOne({ Title: req.params.Title})
   .then(function(movie) {
     res.json(movie)
@@ -64,7 +64,7 @@ app.get('/movies/:Title', passport.authenticate('jwt', {session: false}), functi
 
 
 // return data about a genre (description) by name (eg Thriller) using mongoose
-app.get('/movies/genre/:Genre', passport.authenticate('jwt', {session: false}), function(req,res) {
+app.get('/movies/genre/:Genre', function(req,res) {
   Movies.findOne({'Genre.Name': req.params.Genre})
   .then(function(genre){
     res.json(genre)
@@ -78,7 +78,7 @@ app.get('/movies/genre/:Genre', passport.authenticate('jwt', {session: false}), 
 
 
 //Return data about directors
-app.get('/movies/director/:Director', passport.authenticate('jwt', {session: false}), function(req,res) {
+app.get('/movies/director/:Director', function(req,res) {
   Movies.findOne({'Director.Name': req.params.Director})
   .then(function(director){
     res.json(director)
