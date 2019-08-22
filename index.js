@@ -1,5 +1,8 @@
 const express = require('express');
 const app = express();
+var bodyParser = require('body-parser');
+
+app.use(bodyParser.json());
 app.use(express.static('public'));
 app.use(express.json());
 
@@ -243,7 +246,7 @@ app.delete('/users/:Username', passport.authenticate('jwt', {session: false}), f
 });
 
 
-// 
+//
 // app.use((err, req, res, next) => {
 //   console.error(err.stack);
 //   res.status(500).send('Oops! Looks like something has gone wrong!');
