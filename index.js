@@ -243,11 +243,11 @@ app.delete('/users/:Username', passport.authenticate('jwt', {session: false}), f
 });
 
 
-
-app.use((err, req, res, next) => {
-  console.error(err.stack);
-  res.status(500).send('Oops! Looks like something has gone wrong!');
-});
+// 
+// app.use((err, req, res, next) => {
+//   console.error(err.stack);
+//   res.status(500).send('Oops! Looks like something has gone wrong!');
+// });
 
 // listening for requests
 // app.listen(8080, () => console.log('Your app is listening on port 8080.'));
