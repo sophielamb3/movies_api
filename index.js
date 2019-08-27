@@ -95,45 +95,45 @@ app.get('/movies/director/:Director', function(req,res) {
 
 
 
-//Validation logic
+// Validation logic
 let userValidation = [
-  check('Username', 'Not Valid').isLength({min: 5}),
-  check('Username').isAlphanumeric(),
-  check('Password').exists(),
-  check('Email').exists(),
-  check('Email').isEmail()
+ check('Username', 'Not Valid').isLength({ min: 5 }),
+ check('Username').isAlphanumeric(),
+ check('Password').exists(),
+ check('Email').exists(),
+ check('Email').isEmail(),
 ]
 //Add a user - allow user to register
 app.post('/users', userValidation, function(req, res) {
-  // check validation object for errors
-  var errors = validationResult(req);
-  if (!errors.isEmpty()) {
-    return res.status(422).json({errors: errors.array() });
-  }
+ // check validation object for errors
+ var errors = validationResult(req);
+ if (!errors.isEmpty()) {
+   return res.status(422).json({ errors: errors.array() });
+ }
 
-  var hashedPassword = Users.hashPassword(req.body.Password);
-  Users.findOne({ Username: req.body.Username })
-  .then (function(user) {
-    if (user) {
-      return res.status(400).send(req.body.Username + "already exists");
-    } else {
-      Users
-      .create({
-        Username: req.body.Username,
-        Password: hashedPassword,
-        Email: req.body.Emial,
-        Birthday: req.body.Birthday
-      })
-      .then(function(user){res.status(201).json(user) })
-      .catch(function(error) {
-        console.error(error);
-        res.status(500).send("Error: " + error);
-      })
-    }
-  }).catch(function(error) {
-    console.error(error);
-    res.status(500).sens("Error: " + error);
-  });
+ var hashedPassword = Users.hashPassword(req.body.Password);
+ Users.findOne({ Username : req.body.Username })
+ .then(function(user) {
+   if (user) {
+     return res.status(400).send(req.body.Username + "already exists");
+   } else {
+     Users
+     .create({
+       Username: req.body.Username,
+       Password: hashedPassword,
+       Email: req.body.Email,
+       Birthday: req.body.Birthday
+     })
+     .then(function(user) {res.status(201).json(user) })
+     .catch(function(error) {
+       console.error(error);
+       res.status(500).send("Error: " + error);
+     })
+   }
+ }).catch(function(error) {
+   console.error(error);
+   res.status(500).send("Error: " + error);
+ });
 });
 
 // updating username/password
