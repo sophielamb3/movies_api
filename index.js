@@ -95,24 +95,25 @@ app.get('/movies/director/:Director', function(req,res) {
 
 
 
+//Validation logic
+let userValidation = [
+  check('Username', 'Not Valid').isLength({min: 5}),
+  check('Username').isAlphanumeric(),
+  check('Password').exists(),
+  check('Email').exists(),
+  check('Email').isEmail()
+]
 //Add a user - allow user to register
-app.post('/users', function(req, res) {
-  // Validation logic here
-  req.checkBody('Username', 'Username is required').notEmpty();
-  req.checkBody('Username', 'Username contains non alphanumeric characters - not allowed.').isAlphanumeric();
-  req.checkBody('Password', 'Password is required').notEmpty();
-  req.checkBody('Email', 'Email is required').notEmpty();
-  req.checkBody('Email', 'Email does not appear to be valid').isEmail();
-
+app.post('/users', userValidation, function(req, res) {
   // check validation object for errors
-  var errors = req.validationErrors();
-  if (errors) {
-    return res.status(422).json({errors: errors});
+  var errors = validationResult(req);
+  if (!errors.isEmpty()) {
+    return res.status(422).json({errors: errors.array() });
   }
 
   var hashedPassword = Users.hashPassword(req.body.Password);
-  Users.findOne({ Username : req.body.Username })
-  .then(function(user) {
+  Users.findOne({ Username: req.body.Username })
+  .then (function(user) {
     if (user) {
       return res.status(400).send(req.body.Username + "already exists");
     } else {
@@ -120,10 +121,10 @@ app.post('/users', function(req, res) {
       .create({
         Username: req.body.Username,
         Password: hashedPassword,
-        Email: req.body.Email,
+        Email: req.body.Emial,
         Birthday: req.body.Birthday
       })
-      .then(function(user) {res.status(201).json(user) })
+      .then(function(user){res.status(201).json(user) })
       .catch(function(error) {
         console.error(error);
         res.status(500).send("Error: " + error);
@@ -131,10 +132,9 @@ app.post('/users', function(req, res) {
     }
   }).catch(function(error) {
     console.error(error);
-    res.status(500).send("Error: " + error);
+    res.status(500).sens("Error: " + error);
   });
 });
-
 
 // updating username/password
 
