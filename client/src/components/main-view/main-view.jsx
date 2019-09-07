@@ -17,7 +17,7 @@ export class MainView extends React.Component {
 
   // One of the "hooks" available in a React Component
   componentDidMount() {
-    axios.get('<my-api-endpoint/movies>')
+    axios.get('https://myflixbysophie.herokuapp.com/movies')
       .then(response => {
         // Assign the result to the state
         this.setState({
@@ -35,11 +35,6 @@ export class MainView extends React.Component {
     });
   }
 
-  handleBackBtnClick() {
-    this.setState({
-      selectedMovie: null
-    });
-  }
 
   render() {
     // If the state isn't initialized, this will throw on runtime
@@ -51,20 +46,12 @@ export class MainView extends React.Component {
 
     return (
      <div className="main-view">
-     {selectedMovie ? (
-       <MovieView
-          movie={selectedMovie}
-          onClick={() => this.handleBackBtnClick()}
-        />
-     ) : (
-        movies.map(movie => (
-         <MovieCard
-            key={movie._id}
-            movie={movie}
-            onClick={movie => this.onMovieClick(movie)}
-          />
+     {selectedMovie
+       ? <MovieView movie={selectedMovie}/>
+       : movies.map(movie => (
+         <MovieCard key={movie._id} movie={movie} onClick={movie => this.onMovieClick(movie)}/>
        ))
-     )}
+     }
      </div>
     );
   }

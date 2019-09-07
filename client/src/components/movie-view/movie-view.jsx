@@ -13,6 +13,10 @@ export class MovieView extends React.Component {
 
     if (!movie) return null;
 
+    const backButtonHandler = () => {
+      window.open('/', '_self');
+    }
+
     return (
        <div className="movie-view">
         <div className="movie-title">
@@ -32,7 +36,7 @@ export class MovieView extends React.Component {
           <div className="label">Director</div>
           <div className="value">{movie.Director.Name}</div>
         </div>
-        <button onClick={() => onClick()} className="back-button">
+        <button onClick={ backButtonHandler } className="back-button">
           Go Back
         </button>
        </div>
