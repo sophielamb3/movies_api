@@ -52,11 +52,11 @@ export class MainView extends React.Component {
     });
   }
 
-  register() {
-    this.setState({
-      register: false
-    });
-  }
+  // register() {
+  //   this.setState({
+  //     register: false
+  //   });
+  // }
 
 
   render() {
@@ -64,7 +64,7 @@ export class MainView extends React.Component {
     // before the data is initially loaded
     const { movies, selectedMovie, user } = this.state;
 
-    if (!user && register === false) return <LoginView onClick = {() => this.register()} onLoggedIn={user => this.onLoggedIn(user)}/>
+    if (!user) return <LoginView onClick = {() => this.register()} onLoggedIn={user => this.onLoggedIn(user)}/>
     if (register) return <RegistrationView onSignedIn={user => this.onSignedIn(user)}/>
     // Before the movies have been loaded
     if (!movies) return <div className="main-view"/>;

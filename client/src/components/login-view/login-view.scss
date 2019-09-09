@@ -9,12 +9,12 @@ form {
   margin: 70px auto;
   border-radius: 2px;
   background-color: $primary-color-lighter;
-  color: white;
+  color: #141d2b;
   display: flex;
   flex-direction: column;
   align-items: center;
   font-family: 'Poppins', sans-serif;
-  box-shadow: 0 19px 38px rgba(0,0,0,0.30), 0 15px 12px rgba(0,0,0,0.22);
+  box-shadow: 0 19px 38px rgba(0,0,0,0.30), 0 5px 10px rgba(0,0,0,0.22);
   position: relative;
   animation: formSlideIn .5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
   overflow: scroll;
@@ -26,8 +26,7 @@ form {
 }
 
 .btn {
-  width: 100px;
-  margin: 15px 0;
+  width: 300px;
 }
 
 .btn-primary {

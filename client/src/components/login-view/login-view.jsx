@@ -50,7 +50,7 @@ export function LoginView(props) {
       Login
       </Button>
       <p>Not signed up yet?</p>
-      <p>Get signed up <span onClick={() => props.onClick()}>here!</span></p>
+      <p><Button variant="secondary" type="button" href="./registration-view.jsx">Get signed up here!</Button></p>
     </Form>
   );
 }
