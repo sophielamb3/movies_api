@@ -8,6 +8,7 @@ export function LoginView(props) {
   const [ username, setUsername ] = useState('');
   const [ password, setPassword ] = useState('');
 
+
   const handleSubmit = (e) => {
     e.preventDefault();
     console.log(username, password);
@@ -49,8 +50,9 @@ export function LoginView(props) {
       <Button variant="primary" type="button" onClick={handleSubmit}>
       Login
       </Button>
+      <br></br>
       <p>Not signed up yet?</p>
-      <p><Button variant="secondary" type="button" href="./registration-view.jsx">Get signed up here!</Button></p>
+      <p><Button variant="secondary" type="button" onClick={handleSubmit}>Get signed up here!</Button></p>
     </Form>
   );
 }
