@@ -15,6 +15,7 @@ export class MainView extends React.Component {
       movies: null,
       selectedMovie: null,
       user: null,
+      register: true
     };
   }
 
@@ -51,17 +52,17 @@ export class MainView extends React.Component {
     });
   }
 
-  // register() {
-  //   this.setState({
-  //     register: false
-  //   });
-  // }
+register() {
+  this.setState({
+  register: false
+  });
+}
 
 
   render() {
     // If the state isn't initialized, this will throw on runtime
     // before the data is initially loaded
-    const { movies, selectedMovie, user } = this.state;
+    const { movies, selectedMovie, user, register } = this.state;
 
     if (!user) return <LoginView onClick = {() => this.register()} onLoggedIn={user => this.onLoggedIn(user)}/>
     if (!register) return <RegistrationView onSignedIn={user => this.onSignedIn(user)}/>
