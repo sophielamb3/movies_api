@@ -1,6 +1,7 @@
 import React from 'react';
 import axios from 'axios';
 
+import { Container, Row } from 'react-bootstrap';
 import { LoginView } from '../login-view/login-view';
 import { RegistrationView } from '../registration-view/registration-view';
 import { MovieCard } from '../movie-card/movie-card';
@@ -71,12 +72,17 @@ register() {
 
     return (
      <div className="main-view">
-     {selectedMovie
-       ? <MovieView movie={selectedMovie}/>
-       : movies.map(movie => (
-         <MovieCard key={movie._id} movie={movie} onClick={movie => this.onMovieClick(movie)}/>
-       ))
-     }
+       <Container>
+        <Row>
+           {selectedMovie ? (
+              <MovieView movie={selectedMovie}/>
+            ) : (
+              movies.map(movie => (
+               <MovieCard key={movie._id} movie={movie} onClick={movie => this.onMovieClick(movie)}/>
+             ))
+           )}
+          </Row>
+        </Container>
      </div>
     );
   }
