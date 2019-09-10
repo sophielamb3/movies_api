@@ -1,4 +1,6 @@
 import React from 'react';
+import { Button } from 'react-bootstrap';
+import './movie-view.scss';
 
 export class MovieView extends React.Component {
 
@@ -14,7 +16,7 @@ export class MovieView extends React.Component {
     if (!movie) return null;
 
     const backButtonHandler = () => {
-      window.open('/', '_self');
+      window.open('./main-view.jsx', '_self');
     }
 
     return (
@@ -36,9 +38,9 @@ export class MovieView extends React.Component {
           <div className="label">Director</div>
           <div className="value">{movie.Director.Name}</div>
         </div>
-        <button onClick={ backButtonHandler } className="back-button">
+        <Button variant="primary" onClick={ backButtonHandler } className="back-button">
           Go Back
-        </button>
+        </Button>
        </div>
     );
   }
