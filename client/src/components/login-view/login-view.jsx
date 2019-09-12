@@ -3,10 +3,12 @@ import PropTypes from 'prop-types';
 import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
 import './login-view.scss';
+import { RegistrationView } from '../registration-view/registration-view';
 
 export function LoginView(props) {
   const [ username, setUsername ] = useState('');
   const [ password, setPassword ] = useState('');
+  const [ isRegister, setRegister ] = useState(false)
 
 
   const handleSubmit = (e) => {
@@ -15,6 +17,12 @@ export function LoginView(props) {
     /* Send a request to the server for authentication */
     /* then call props.onLoggedIn(username) */
     props.onLoggedIn(username);
+  };
+
+  const isReg = (e) => {
+    e.preventDefault();
+    console.log(isRegister);
+    setRegister(!isRegister)
   };
 
   // return (
@@ -52,7 +60,7 @@ export function LoginView(props) {
       </Button>
       <br></br>
       <p>Not signed up yet?</p>
-      <p><Button variant="secondary" type="button" onClick={handleSubmit}>Get signed up here!</Button></p>
+      <p><Button variant="secondary" type="button" onClick={isReg}>Get signed up here!</Button></p>
     </Form>
   );
 }
