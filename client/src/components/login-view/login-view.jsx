@@ -4,6 +4,7 @@ import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
 import './login-view.scss';
 import { RegistrationView } from '../registration-view/registration-view';
+import axios from 'axios';
 
 export function LoginView(props) {
   const [ username, setUsername ] = useState('');
@@ -12,12 +13,20 @@ export function LoginView(props) {
 
 
   const handleSubmit = (e) => {
-    e.preventDefault();
-    console.log(username, password);
-    /* Send a request to the server for authentication */
-    /* then call props.onLoggedIn(username) */
-    props.onLoggedIn(username);
-  };
+  e.preventDefault();
+  /* Send a request to the server for authentication */
+  axios.post('https://myflixbysophie.herokuapp.com/login', {
+    Username: username,
+    Password: password
+  })
+  .then(response => {
+    const data = response.data;
+    props.onLoggedIn(data);
+  })
+  .catch(e => {
+    console.log('no such user')
+  });
+};
 
   const isReg = (e) => {
     e.preventDefault();
@@ -42,6 +51,12 @@ export function LoginView(props) {
   //       <Form.Label>Username:</Form.Label>
   //
   // );
+
+  if(isRegister){
+    return (<RegistrationView goBack={isReg} onSignedIn={ props.onLoggedIn }/>)
+  }else{
+
+
   return (
     <Form>
       <h2>Login!</h2>
@@ -63,6 +78,7 @@ export function LoginView(props) {
       <p><Button variant="secondary" type="button" onClick={isReg}>Get signed up here!</Button></p>
     </Form>
   );
+  }
 }
 
 LoginView.propTypes = {
