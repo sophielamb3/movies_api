@@ -23,7 +23,7 @@ const passport = require('passport');
 require('./passport')
 var auth = require('./auth')(app);
 
-const cors = require('cors');
+var cors = require('cors');
 var allowedOrigins = ['http://localhost:8080', 'http://testsite.com', 'http://localhost:1234', 'https://myflixbysophie.herokuapp.com'];
 app.use(cors({
   origin: function(origin, callback){

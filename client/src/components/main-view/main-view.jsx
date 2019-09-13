@@ -21,18 +21,28 @@ export class MainView extends React.Component {
   }
 
   // One of the "hooks" available in a React Component
-  componentDidMount() {
-    axios.get('https://myflixbysophie.herokuapp.com/movies')
-      .then(response => {
-        // Assign the result to the state
-        this.setState({
-          movies: response.data
-        });
-      })
-      .catch(function (error) {
-        console.log(error);
-      });
+  // componentDidMount() {
+  //   axios.get('https://myflixbysophie.herokuapp.com/movies')
+  //     .then(response => {
+  //       // Assign the result to the state
+  //       this.setState({
+  //         movies: response.data
+  //       });
+  //     })
+  //     .catch(function (error) {
+  //       console.log(error);
+  //     });
+  // }
+
+componentDidMount() {
+  let accessToken = localStorage.getItem('token');
+  if (accessToken !== null) {
+    this.setState({
+      user: localStorage.getItem('user')
+    });
+    this.getMovies(accessToken);
   }
+}
 
   onMovieClick(movie) {
     this.setState({
