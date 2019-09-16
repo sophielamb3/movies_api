@@ -66,10 +66,10 @@ componentDidMount() {
     this.getMovies(authData.token);
   }
 
+//, {headers: { Authorization: 'Bearer ${token}'}}
+
 getMovies(token) {
-  axios.get('https://myflixbysophie.herokuapp.com/movies', {
-    headers: { Authorization: 'Bearer ${token}'}
-  })
+  axios.get('https://myflixbysophie.herokuapp.com/movies')
   .then(response => {
     //Assign result to state
     this.setState({
