@@ -1,6 +1,8 @@
 import React from 'react';
 import axios from 'axios';
 
+import { BrowserRouter as Router, Route } from "react-router-dom";
+
 import { Container, Row } from 'react-bootstrap';
 import { LoginView } from '../login-view/login-view';
 import { RegistrationView } from '../registration-view/registration-view';
@@ -106,19 +108,26 @@ register() {
     if (!movies) return <div className="main-view"/>;
 
     return (
-     <div className="main-view">
-       <Container>
-        <Row>
-           {selectedMovie ? (
-              <MovieView movie={selectedMovie}/>
-            ) : (
-              movies.map(movie => (
-               <MovieCard key={movie._id} movie={movie} onClick={movie => this.onMovieClick(movie)}/>
-             ))
-           )}
-          </Row>
-        </Container>
-     </div>
+      <Router>
+        <div className="main-view">
+          <Route exact path="/" render={() => movies.map(m => <MovieCard key={m._id} movie={m}/>)}/>
+          <Route path="/movies/:moviesID" render={({match}) => <MovieView movie={movies.find(m => m._id === match.params.movieId)}/>}/>
+        </div>
+      </Router>
     );
   }
 }
+
+//    <div className="main-view">
+//        <Container>
+//         <Row>
+//            {selectedMovie ? (
+//               <MovieView movie={selectedMovie}/>
+//             ) : (
+//               movies.map(movie => (
+//                <MovieCard key={movie._id} movie={movie} onClick={movie => this.onMovieClick(movie)}/>
+//              ))
+//            )}
+//           </Row>
+//         </Container>
+//      </div>
