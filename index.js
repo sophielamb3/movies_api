@@ -171,7 +171,7 @@ app.put('/users/:Username',passport.authenticate('jwt', {session: false}), funct
   })
 });
 
-// user with movie to favourites
+// user with movie to favourites hhs
 app.get('/users/:Username/',function (req,res){
   Users.findOne({Username : req.params.Username })
   .populate('FavouriteMovies')
