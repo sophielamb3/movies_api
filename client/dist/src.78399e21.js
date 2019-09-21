@@ -53721,9 +53721,9 @@ function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _d
 
 function _possibleConstructorReturn(self, call) { if (call && (_typeof(call) === "object" || typeof call === "function")) { return call; } return _assertThisInitialized(self); }
 
-function _assertThisInitialized(self) { if (self === void 0) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return self; }
-
 function _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf : function _getPrototypeOf(o) { return o.__proto__ || Object.getPrototypeOf(o); }; return _getPrototypeOf(o); }
+
+function _assertThisInitialized(self) { if (self === void 0) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return self; }
 
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function"); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, writable: true, configurable: true } }); if (superClass) _setPrototypeOf(subClass, superClass); }
 
@@ -53743,6 +53743,7 @@ function (_React$Component) {
     _this.state = {
       user: null
     };
+    _this.deleteFavouriteMovie = _this.deleteFavouriteMovie.bind(_assertThisInitialized(_this));
     return _this;
   }
 
@@ -53764,6 +53765,15 @@ function (_React$Component) {
         console.log("error setting state");
         console.log(err);
       });
+    }
+  }, {
+    key: "updateUser",
+    value: function updateUser() {} //this method should delete movie favourites
+
+  }, {
+    key: "deleteFavouriteMovie",
+    value: function deleteFavouriteMovie(movie) {
+      alert("movie deleted");
     }
   }, {
     key: "deleteUser",
@@ -53799,9 +53809,9 @@ function (_React$Component) {
         className: "username"
       }, _react.default.createElement("div", {
         className: "label"
-      }, "Name"), _react.default.createElement("div", {
-        className: "value"
-      }, user.Username)), _react.default.createElement("div", {
+      }, "Name"), _react.default.createElement("input", {
+        value: user.Username
+      })), _react.default.createElement("div", {
         className: "password"
       }, _react.default.createElement("div", {
         className: "label"
@@ -53811,19 +53821,23 @@ function (_React$Component) {
         className: "birthday"
       }, _react.default.createElement("div", {
         className: "label"
-      }, "Birthday"), _react.default.createElement("div", {
-        className: "value"
-      }, user.Birthday)), _react.default.createElement("div", {
+      }, "Birthday"), _react.default.createElement("input", {
+        value: user.Birthday
+      })), _react.default.createElement("div", {
         className: "email"
       }, _react.default.createElement("div", {
         className: "label"
-      }, "Email"), _react.default.createElement("div", {
-        className: "value"
-      }, user.Email)), _react.default.createElement("div", {
+      }, "Email"), _react.default.createElement("input", {
+        value: user.Email
+      })), _react.default.createElement("div", {
         className: "favoriteMovies"
       }, _react.default.createElement("div", {
         className: "label"
-      }, "Favorite Movies"), _react.default.createElement("div", {
+      }, "Favorite Movies"), user.FavoriteMovies && user.FavoriteMovies.length > 0 ? user.FavoriteMovies.map(function (fav) {
+        return _react.default.createElement("li", null, fav.title, _react.default.createElement("button", {
+          onClick: _this3.deleteFavouriteMovie(fav._id)
+        }, "x"));
+      }) : "No movies Yet", _react.default.createElement("div", {
         className: "value"
       }, user.FavoriteMovies)), _react.default.createElement(_reactRouterDom.Link, {
         to: '/'
@@ -53888,9 +53902,9 @@ function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _d
 
 function _possibleConstructorReturn(self, call) { if (call && (_typeof(call) === "object" || typeof call === "function")) { return call; } return _assertThisInitialized(self); }
 
-function _assertThisInitialized(self) { if (self === void 0) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return self; }
-
 function _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf : function _getPrototypeOf(o) { return o.__proto__ || Object.getPrototypeOf(o); }; return _getPrototypeOf(o); }
+
+function _assertThisInitialized(self) { if (self === void 0) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return self; }
 
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function"); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, writable: true, configurable: true } }); if (superClass) _setPrototypeOf(subClass, superClass); }
 
@@ -53913,6 +53927,7 @@ function (_React$Component) {
       user: null,
       register: true
     };
+    _this.onLoggedOut = _this.onLoggedOut.bind(_assertThisInitialized(_this));
     return _this;
   } // One of the "hooks" available in a React Component
   // componentDidMount() {
@@ -53950,12 +53965,17 @@ function (_React$Component) {
     }
   }, {
     key: "onLoggedOut",
-    value: function onLoggedOut(user) {
-      // this.setState({
-      //   user
-      // });
+    value: function onLoggedOut(e) {
+      e.preventDefault();
+      this.setState({
+        movies: [],
+        selectedMovie: null,
+        user: null,
+        register: true
+      });
       localStorage.removeItem('token');
       localStorage.removeItem('user');
+      alert("out");
     }
   }, {
     key: "onLoggedIn",
@@ -53973,6 +53993,7 @@ function (_React$Component) {
     value: function getMovies(token) {
       var _this2 = this;
 
+      // /https://myflixbysophie.herokuapp.com
       _axios.default.get('https://myflixbysophie.herokuapp.com/movies', {
         headers: {
           Authorization: "Bearer ".concat(token)
@@ -54042,7 +54063,8 @@ function (_React$Component) {
       }, "Home"), _react.default.createElement(_reactBootstrap.Nav.Link, {
         href: "/profile/".concat(user)
       }, "Profile"), _react.default.createElement(_reactBootstrap.Nav.Link, {
-        href: "#logout"
+        href: "#logout",
+        onClick: this.onLoggedOut
       }, "Logout"))), _react.default.createElement("section", {
         className: "banner p-5 text-center"
       }, _react.default.createElement("h1", null, "Welcome to myFLix"), _react.default.createElement("h4", null, "Start browsing your favourite movies below!"), _react.default.createElement("div", {
