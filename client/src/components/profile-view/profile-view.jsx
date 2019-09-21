@@ -15,9 +15,13 @@ export class ProfileView extends React.Component {
     this.state = {};
   }
 
+  componentDidMount(){
+    // axios.get()
+  }
+
   deleteUser(event) {
     event.preventDefault();
-    axios.delete(`https://myflixbysophie.herokuapp.com/users/${this.props.user.Username}`, {
+    axios.delete(`https://myflixbysophie.herokuapp.com/users/${this.props.user}`, {
       headers: { Authorization: `Bearer ${localStorage.getItem('token')}`}
     })
     .then(response => {
@@ -35,7 +39,7 @@ export class ProfileView extends React.Component {
 
   render() {
     const {user} = this.props;
-
+    console.log(user)
     if (!user) return null;
 
     return (
