@@ -1,0 +1,40 @@
+$primary-color: #3949ab;
+$primary-color-lighter: #eceff1;
+$secondary-color: #e91e63;
+$error-color: #d50000;
+
+form {
+  width: 50%;
+  padding: 10px;
+  margin: 70px auto;
+  border-radius: 2px;
+  background-color: $primary-color-lighter;
+  color: #141d2b;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  font-family: 'Poppins', sans-serif;
+  box-shadow: 0 19px 38px rgba(0,0,0,0.30), 0 15px 12px rgba(0,0,0,0.22);
+  position: relative;
+  animation: formSlideIn .5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  overflow: scroll;
+}
+
+.form-group {
+  width: 90%;
+  margin: 15px 0;
+}
+
+.btn {
+  margin: 15px 0;
+}
+
+.btn-primary {
+  background-color: $secondary-color;
+  color: white;
+}
+
+.btn-primary:hover {
+  background-color: #ad1457;
+  color: white;
+}
