@@ -12,36 +12,12 @@ export class ProfileView extends React.Component {
   constructor() {
     super();
 
-    this.state = {
-      user: null
-    };
-
-    this.deleteFavouriteMovie = this.deleteFavouriteMovie.bind(this);
+    this.state = {};
   }
 
   componentDidMount(){
-    axios.get(`https://myflixbysophie.herokuapp.com/users/${this.props.user}`, {
-      headers: { Authorization: `Bearer ${localStorage.getItem('token')}`}
-    })
-    .then(response => {
-      //set user state from url
-        this.setState({
-          user: response.data
-        })
-    })
-    .catch(err=> {
-        console.log("error setting state")
-        console.log(err)
-    })
+    // axios.get()
   }
-
-  updateUser(){
-
-  }
-  //this method should delete movie favourites
-  deleteFavouriteMovie(movie){
-      alert("movie deleted")
-  } 
 
   deleteUser(event) {
     event.preventDefault();
@@ -62,7 +38,7 @@ export class ProfileView extends React.Component {
   }
 
   render() {
-    const {user} = this.state;
+    const {user} = this.props;
     console.log(user)
     if (!user) return null;
 
@@ -71,7 +47,7 @@ export class ProfileView extends React.Component {
       <h1>Your Profile Data</h1>
         <div className="username">
           <div className="label">Name</div>
-          <input value={user.Username} />
+          <div className="value">{user.Username}</div>
         </div>
         <div className="password">
           <div className="label">Password</div>
@@ -79,16 +55,14 @@ export class ProfileView extends React.Component {
         </div>
         <div className="birthday">
           <div className="label">Birthday</div>
-          <input value={user.Birthday} />
+          <div className="value">{user.Birthday}</div>
         </div>
         <div className="email">
           <div className="label">Email</div>
-          <input value={user.Email} />
+          <div className="value">{user.Email}</div>
         </div>
         <div className="favoriteMovies">
           <div className="label">Favorite Movies</div>
-          {/* create a loop here to loop through */}
-          {(user.FavoriteMovies && user.FavoriteMovies.length > 0) ? user.FavoriteMovies.map(fav => <li>{fav.title}<button onClick={this.deleteFavouriteMovie(fav._id)}>x</button></li>) : "No movies Yet"}
           <div className="value">{user.FavoriteMovies}</div>
         </div>
         <Link to={'/'}>
