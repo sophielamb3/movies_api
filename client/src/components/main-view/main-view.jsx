@@ -25,6 +25,8 @@ export class MainView extends React.Component {
       user: null,
       register: true
     };
+
+    this.onLoggedOut = this.onLoggedOut.bind(this);
   }
 
   // One of the "hooks" available in a React Component
@@ -57,13 +59,19 @@ componentDidMount() {
     });
   }
 
-  onLoggedOut(user) {
-    // this.setState({
-    //   user
-    // });
+  onLoggedOut(e){
+    e.preventDefault()
+    this.setState({
+      movies: [],
+      selectedMove: null,
+      user: null,
+      register: true
+    });
     localStorage.removeItem('token');
-    localStorage.removeItem('user');
+    lovalStorgae.removeItem('user');
+    alert("out")
   }
+
   onLoggedIn(authData) {
     console.log(authData);
     this.setState({
@@ -119,11 +127,11 @@ register() {
 
         <div className="main-view">
         <Navbar bg="dark" variant="dark">
-          <Navbar.Brand>Sophie Lamb</Navbar.Brand>
+          <Navbar.Brand>myFlix</Navbar.Brand>
           <Nav className="ml-auto">
             <Nav.Link href="/">Home</Nav.Link>
-            <Nav.Link href="/profile">Profile</Nav.Link>
-            <Nav.Link href="#logout">Logout</Nav.Link>
+            <Nav.Link href={`/profile/${user}`}>Profile</Nav.Link>
+            <Nav.Link href="#logout" onClick={this.onLoggedOut}>Logout</Nav.Link>
           </Nav>
         </Navbar>
         <section className="banner p-5 text-center">
@@ -143,6 +151,7 @@ register() {
           }}/>
 
           <Route path="/profile/:userID" render={({match}) => <ProfileView user={match.params.userID} /> }/>
+
 
           <Route path="/genre/:name" render={({match}) => {
             if (!movies) return <div className="main-view"/>;

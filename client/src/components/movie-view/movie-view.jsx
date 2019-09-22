@@ -12,6 +12,30 @@ export class MovieView extends React.Component {
     this.state = {};
   }
 
+  addMovieToFavorites() {
+    axios.post(`https://myflixbysophie.herokuapp.com/users/${user.Username}/movies/${movie._id}`, {}, {
+        headers: { Authorization: `Bearer ${localStorage.token}` }
+    })
+        .then(response => {
+            this.props.updateProfile('FavoriteMovies', response.data.FavoriteMovies);
+        })
+        .catch(err => {
+            console.error(err);
+        });
+}
+
+removeMovieFromFavorites() {
+    axios.delete(`https://myflixbysophie.herokuapp.com/users/${user.Username}/movies/${movie._id}`, {
+        headers: { Authorization: `Bearer ${localStorage.token}` }
+    })
+        .then(response => {
+            this.props.updateProfile('FavoriteMovies', response.data.FavoriteMovies);
+        })
+        .catch(err => {
+            console.error(err);
+        });
+}
+
   render() {
     const { movie } = this.props;
 
@@ -27,21 +51,21 @@ export class MovieView extends React.Component {
     return (
        <div className="movie-view">
         <div className="movie-title">
-          <div className="label">Title</div>
-          <div className="value">{movie.Title}</div>
+          <h5 className="label">Title</h5>
+          <p className="value">{movie.Title}</p>
         </div>
         <div className="movie-description">
-          <div className="label">Description</div>
-          <div className="value">{movie.Description}</div>
+          <h5 className="label">Description</h5>
+          <p className="value">{movie.Description}</p>
         </div>
         <img className="movie-poster" src={movie.ImagePath} />
         <div className="movie-genre">
-          <div className="label">Genre</div>
-          <div className="value">{movie.Genre.Name}</div>
+          <h5 className="label">Genre</h5>
+          <p className="value">{movie.Genre.Name}</p>
         </div>
         <div className="movie-director">
-          <div className="label">Director</div>
-          <div className="value">{movie.Director.Name}</div>
+          <h5 className="label">Director</h5>
+          <p className="value">{movie.Director.Name}</p>
         </div>
         {/* <Button variant="primary" onClick={ backButtonHandler } className="back-button">
           Go Back
