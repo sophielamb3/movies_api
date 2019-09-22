@@ -171,18 +171,6 @@ app.put('/users/:Username',passport.authenticate('jwt', {session: false}), funct
   })
 });
 
-// user with movie to favourites hhs
-app.get('/users/:Username/',function (req,res){
-  Users.findOne({Username : req.params.Username })
-  .populate('FavouriteMovies')
-  .then(user => {
-    res.status(200).json(user)
-  })
-  .catch(error=> {
-    res.status(400).json(err)
-  })
-})
-
 
 // user adding movie to favourites
 app.post('/users/:Username/Movies/:MovieID', passport.authenticate('jwt', {session: false}), function (req,res){
