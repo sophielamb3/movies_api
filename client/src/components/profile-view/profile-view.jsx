@@ -36,7 +36,32 @@ componentDidMount(){
   })
 }
 
-updateUser(event){
+
+
+  deleteUser(event) {
+    event.preventDefault();
+    axios.delete(`https://myflixbysophie.herokuapp.com/users/${this.props.user}`, {
+      headers: { Authorization: `Bearer ${localStorage.getItem('token')}`}
+    })
+    .then(response => {
+      alert('Your Account has been deleted!');
+      //clears storage
+      localStorage.removeItem('token');
+      localStorage.removeItem('user');
+      //opens login view
+      window.open('/', '_self');
+    })
+    .catch(event => {
+      alert('failed to delete user');
+    });
+  }
+
+  deleteFavouriteMovie(movie){
+    alert("Movie deleted from favourites!")
+  }
+
+  //update user data
+  handleSubmit(event) {
     event.preventDefault();
     axios.put(`https://myflixbysophie.herokuapp.com/users/${this.props.user}`), {
       Username: this.props.username,
@@ -59,37 +84,8 @@ updateUser(event){
     });
   };
 
-}
-
-
-  deleteFavouriteMovie(movie){
-    alert("Movie deleted from favourites!")
-  }
-
-  deleteUser(event){
-    event.preventDefault();
-    axios.delete(`https://myflixbysophie.herokuapp.com/users/${this.props.user}`, {
-      headers: { Authorization: `Bearer ${localStorage.getItem('token')}`}
-    })
-    .then(response => {
-      alert('Your Account has been deleted!');
-      //clears storage
-      localStorage.removeItem('token');
-      localStorage.removeItem('user');
-      //opens login view
-      window.open('/', '_self');
-    })
-    .catch(event => {
-      alert('failed to delete user');
-    });
-  }
-
-
-
-
-
-  render(){
-    const {user} = this.state;
+  render() {
+    const {user} = this.props;
     console.log(user)
     if (!user) return null;
 
@@ -98,7 +94,7 @@ updateUser(event){
       <h1>Your Profile Data</h1>
         <div className="username">
           <div className="label">Name</div>
-          <input value={user.Username}/>
+          <div className="value">{user.Username}</div>
         </div>
         <div className="password">
           <div className="label">Password</div>
@@ -106,16 +102,15 @@ updateUser(event){
         </div>
         <div className="birthday">
           <div className="label">Birthday</div>
-          <input value={user.Birthday}/>
+          <div className="value">{user.Birthday}</div>
         </div>
         <div className="email">
           <div className="label">Email</div>
-          <input value={user.Email}/>
+          <div className="value">{user.Email}</div>
         </div>
         <div className="favoriteMovies">
           <div className="label">Favorite Movies</div>
-          {/* create a loop here to loop through */}
-          {(user.FavoriteMovies && user.FavoriteMovies.length > 0) ? user.FavoriteMovies.map(fav => <li>{fav.title}<button onClick={this.deleteFavouriteMovie(fav._id)}>x</button></li>) : "No movies Yet"}
+          <div className="value">{user.FavoriteMovies}</div>
         </div>
         <Link to={'/'}>
           <Button  variant="primary" type="button">
