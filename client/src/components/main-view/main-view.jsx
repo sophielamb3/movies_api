@@ -25,6 +25,8 @@ export class MainView extends React.Component {
       user: null,
       register: true
     };
+
+    this.onLoggedOut = this.onLoggedOut.bind(this);
   }
 
   // One of the "hooks" available in a React Component
@@ -57,12 +59,17 @@ componentDidMount() {
     });
   }
 
-  onLoggedOut(user) {
-    // this.setState({
-    //   user
-    // });
+  onLoggedOut(e) {
+    e.preventDefault()
+    this.setState({
+      movies: [],
+      selectedMovie: null,
+      user: null,
+      register: true
+    });
     localStorage.removeItem('token');
     localStorage.removeItem('user');
+    alert("out")
   }
   onLoggedIn(authData) {
     console.log(authData);
@@ -76,6 +83,7 @@ componentDidMount() {
   }
 
 getMovies(token) {
+  // /https://myflixbysophie.herokuapp.com
   axios.get('https://myflixbysophie.herokuapp.com/movies', {
     headers: { Authorization: `Bearer ${token}`}
   })
@@ -122,8 +130,8 @@ register() {
           <Navbar.Brand>Sophie Lamb</Navbar.Brand>
           <Nav className="ml-auto">
             <Nav.Link href="/">Home</Nav.Link>
-            <Nav.Link href="/profile">Profile</Nav.Link>
-            <Nav.Link href="#logout">Logout</Nav.Link>
+            <Nav.Link href={`/profile/${user}`}>Profile</Nav.Link>
+            <Nav.Link href="#logout" onClick={this.onLoggedOut}>Logout</Nav.Link>
           </Nav>
         </Navbar>
         <section className="banner p-5 text-center">
