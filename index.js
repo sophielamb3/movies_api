@@ -173,6 +173,7 @@ app.put('/users/:Username',passport.authenticate('jwt', {session: false}), funct
 
 //user with movie to favourites
 app.get('/users/:Username', function (req,res){
+  console.log('=====, req.params')
   Users.findOne({Username: req.params.Username})
   .populate('FavouriteMovies')
   .then(user => {

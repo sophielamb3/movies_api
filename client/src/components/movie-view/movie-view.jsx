@@ -1,4 +1,5 @@
 import React from 'react';
+import axios from 'axios';
 import { Button } from 'react-bootstrap';
 import './movie-view.scss';
 
@@ -9,20 +10,43 @@ export class MovieView extends React.Component {
   constructor() {
     super();
 
-    this.state = {};
+    this.state = {
+      user: null
+    };
+
+    this.addMovieToFavorites = this.addMovieToFavorites.bind(this);
+
   }
 
-  addMovieToFavorites() {
-    axios.post(`https://myflixbysophie.herokuapp.com/users/${user.Username}/movies/${movie._id}`, {}, {
-        headers: { Authorization: `Bearer ${localStorage.token}` }
-    })
-        .then(response => {
-            this.props.updateProfile('FavoriteMovies', response.data.FavoriteMovies);
-        })
-        .catch(err => {
-            console.error(err);
-        });
+  // addMovieToFavorites() {
+  //       let movieId = this.props.movie._id;
+  //       console.log(movieId);
+  //       axios.post('https://myflix-mern.herokuapp.com/users/johndoe/movies/5c97cc646728671b439bc21a', {
+  //           headers: { Authorization: `Bearer ${localStorage.token}` }
+  //       })
+  //           .then(response => {
+  //               this.props.updateProfile('FavoriteMovies', response.data.FavoriteMovies);
+  //           })
+  //           .catch(err => {
+  //               console.error(err);
+  //           });
+  //   }
+
+
+addMovieToFavorites(event) {
+  event.preventDefault();
+  axios.post(`https://myflixbysophie.herokuapp.com/users/${this.props.user}/movies/${movie._id}`),{
+    headers: { Authorization: `Bearer ${localStorage.getItem('token')}`}
+  }
+  .then(respone => {
+    alert('Movie added to favourites!');
+  })
+  .catch(event => {
+    alert('Oops... something went wrong!')
+  });
 }
+
+
 
 removeMovieFromFavorites() {
     axios.delete(`https://myflixbysophie.herokuapp.com/users/${user.Username}/movies/${movie._id}`, {
@@ -67,11 +91,14 @@ removeMovieFromFavorites() {
           <h5 className="label">Director</h5>
           <p className="value">{movie.Director.Name}</p>
         </div>
+        <div className='add-to-favorite'>
+          <Button variant="primary" type="button" onClick={(event) => this.addMovieToFavorites(event)}>Add to favorite</Button>
+        </div>
         {/* <Button variant="primary" onClick={ backButtonHandler } className="back-button">
           Go Back
         </Button> */}
 
-        <Link className="back-button btn btn-primary" to="/" >Back</Link>
+        <Link className="back-button btn btn-secondary" to="/" >Back</Link>
        </div>
     );
   }

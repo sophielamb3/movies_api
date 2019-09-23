@@ -110,6 +110,7 @@ componentDidMount(){
         </div>
         <div className="favoriteMovies">
           <div className="label">Favorite Movies</div>
+          {(user.FavoriteMovies && user.FavoriteMovies.length > 0) ? user.FavoriteMovies.map(fav => <li>{fav.title}<button onClick={this.deleteFavouriteMovie(fav._id)}>x</button></li>) : "No movies Yet"}
           <div className="value">{user.FavoriteMovies}</div>
         </div>
         <Link to={'/'}>

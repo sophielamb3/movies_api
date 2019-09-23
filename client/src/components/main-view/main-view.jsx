@@ -143,7 +143,7 @@ register() {
           <Switch>
           <Route exact path="/" render={() => <Row className="mt-5">{movies.map(m => <MovieCard key={m._id} movie={m}/>)}</Row>}/>
 
-          <Route path="/movies/:moviesID" render={({match}) => <MovieView movie={movies.find(m => m._id === match.params.moviesID)}/> }/>
+          <Route path="/movies/:moviesID" render={({match}) => <MovieView user={this.state.user} movie={movies.find(m => m._id === match.params.moviesID)}/> }/>
 
           <Route path="/directors/:name" render={({match}) => {
             if (!movies) return <div className="main-view"/>;

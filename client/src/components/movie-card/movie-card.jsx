@@ -18,7 +18,7 @@ export class MovieCard extends React.Component {
             <Card style={{width: '16rem' }} className="mr-3 mb-3">
               <Card.Img variant="top" src={movie.ImagePath} />
               <Card.Body>
-                <Card.Title>{movie.Title}</Card.Title>
+                <Card.Title>{movie.Title}<b className='is-favorite'>♥</b></Card.Title>
                 <Card.Text numberoflines={1} >{movie.Description}</Card.Text>
                 <Link to={`/movies/${movie._id}`}>
                   <Button variant="link">Read more</Button>
