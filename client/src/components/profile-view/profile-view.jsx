@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {Fragment} from 'react';
 //import PropTypes from 'prop-types';
 import axios from 'axios';
 import Button from 'react-bootstrap/Button';
@@ -56,6 +56,8 @@ componentDidMount(){
     });
   }
 
+
+
   deleteFavouriteMovie(movie){
     alert("Movie deleted from favourites!")
   }
@@ -86,15 +88,18 @@ componentDidMount(){
 
   render() {
     const {user} = this.props;
-    console.log(user)
+    console.log(this.state.user)
     if (!user) return null;
+
 
     return (
       <div className="profile-view">
       <h1>Your Profile Data</h1>
+      {this.state.user &&
+      <Fragment>
         <div className="username">
           <div className="label">Name</div>
-          <div className="value">{user.Username}</div>
+          <div className="value">{this.state.user.Username}</div>
         </div>
         <div className="password">
           <div className="label">Password</div>
@@ -102,17 +107,18 @@ componentDidMount(){
         </div>
         <div className="birthday">
           <div className="label">Birthday</div>
-          <div className="value">{user.Birthday}</div>
+          <div className="value">{this.state.user.Birthday}</div>
         </div>
         <div className="email">
           <div className="label">Email</div>
-          <div className="value">{user.Email}</div>
+          <div className="value">{this.state.user.Email}</div>
         </div>
         <div className="favoriteMovies">
           <div className="label">Favorite Movies</div>
           {(user.FavoriteMovies && user.FavoriteMovies.length > 0) ? user.FavoriteMovies.map(fav => <li>{fav.title}<button onClick={this.deleteFavouriteMovie(fav._id)}>x</button></li>) : "No movies Yet"}
-          <div className="value">{user.FavoriteMovies}</div>
+          <div className="value">{this.state.user.FavoriteMovies}</div>
         </div>
+        </Fragment>}
         <Link to={'/'}>
           <Button  variant="primary" type="button">
           Go back
@@ -121,7 +127,13 @@ componentDidMount(){
         <Button  variant="primary" type="button" onClick={(event) => this.deleteUser(event)}>
         Delete
         </Button>
+
+        <Button variant="primary" type="button" onClick={(event) => this.handleSubmit(event)}>
+          Update my info
+        </Button>
+
       </div>
+
     );
   }
 }
