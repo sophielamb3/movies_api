@@ -39,6 +39,7 @@ addMovieToFavorites(event) {
     headers: { Authorization: `Bearer ${localStorage.getItem('token')}`}
   }
   .then(respone => {
+    this.props.updateProfile('FavoriteMovies', response.data.FavouriteMovies);
     alert('Movie added to favourites!');
   })
   .catch(event => {
@@ -93,6 +94,9 @@ removeMovieFromFavorites() {
         </div>
         <div className='add-to-favorite'>
           <Button variant="primary" type="button" onClick={(event) => this.addMovieToFavorites(event)}>Add to favorite</Button>
+        </div>
+        <div className='remove-from-favorite'>
+          <Button variant="primary" type="button" onClick={(event) => this.removeMovieFromFavorites(event)}>Remove as favourite</Button>
         </div>
         {/* <Button variant="primary" onClick={ backButtonHandler } className="back-button">
           Go Back
