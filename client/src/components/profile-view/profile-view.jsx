@@ -1,9 +1,10 @@
 import React, {Fragment} from 'react';
 //import PropTypes from 'prop-types';
 import axios from 'axios';
-import Button from 'react-bootstrap/Button';
-
+import {Button } from 'react-bootstrap';
+import ModalPopUp from '../modal/ModalPopUp'
 import { Link } from 'react-router-dom';
+import moment from 'moment'
 
 import './profile-view.scss';
 
@@ -13,30 +14,45 @@ export class ProfileView extends React.Component {
     super();
 
     this.state = {
-      user: null
+      user: null,
+      show: false
     };
 
     this.deleteFavouriteMovie = this.deleteFavouriteMovie.bind(this);
+    this.handleClose = this.handleClose.bind(this);
+    this.handleChange = this.handleChange.bind(this);
+    this.handleSubmit = this.handleSubmit.bind(this);
   }
 
 
 componentDidMount(){
-  axios.get(`https://myflixbysophie.herokuapp.com/users/${this.props.user}`, {
-    headers: { Authorization: `Bearer ${localStorage.getItem('token')}`}
-  })
-  .then(response => {
-    //set user state from url
-      this.setState({
-        user: response.data
-      })
-  })
-  .catch(err=> {
-      console.log("error setting state")
-      console.log(err)
-  })
+  console.log(this.state.user)
+  if(!this.state.user){
+
+    axios.get(`https://myflixbysophie.herokuapp.com/users/${this.props.user}`, {
+      headers: { Authorization: `Bearer ${localStorage.getItem('token')}`}
+    })
+    .then(response => {
+      //set user state from url
+        this.setState({
+          user: response.data
+        })
+    })
+    .catch(err=> {
+        console.log("error setting state")
+        console.log(err)
+    })
+  }
 }
 
 
+  handleClose(e){
+    // e.preventDefault()
+    let curState = Object.assign({}, this.state)
+    curState.show = !curState.show
+    console.log(curState)
+    this.setState(curState)
+  }
 
   deleteUser(event) {
     event.preventDefault();
@@ -64,15 +80,18 @@ componentDidMount(){
 
   //update user data
   handleSubmit(event) {
+
     event.preventDefault();
-    axios.put(`https://myflixbysophie.herokuapp.com/users/${this.props.user}`), {
-      Username: this.props.username,
-      Password: this.props.password,
-      Email: this.props.email,
-      Birthday: this.props.birthday
+    let {user} = this.state
+    console.log(user)
+    axios.put(`https://myflixbysophie.herokuapp.com/users/${user.Username}`, {
+      Username: user.Username,
+      Password: user.Password,
+      Email: user.Email,
+      Birthday: user.Birthday
     }, {
       headers: { Authorization: `Bearer ${localStorage.getItem('token')}`}
-    }
+    })
     .then(response => {
       console.log(response);
       alert('Your data has been updated!');
@@ -86,9 +105,22 @@ componentDidMount(){
     });
   };
 
+  //change state
+  handleChange (e){
+    e.preventDefault()
+    let curState = Object.assign({}, this.state)
+
+    curState.user[e.target.name] = e.target.value
+
+    console.log(this.state)
+    console.log(curState)
+  }
+
   render() {
-    const {user} = this.props;
-    console.log(this.state.user)
+    //where does the props come from
+    // const {user} = this.props;
+    const {show, user} = this.state;
+    console.log(show)
     if (!user) return null;
 
 
@@ -98,8 +130,8 @@ componentDidMount(){
       {this.state.user &&
       <Fragment>
         <div className="username">
-          <div className="label">Name</div>
-          <div className="value">{this.state.user.Username}</div>
+          <div className="label">Username</div>
+          <div className="value">{user.Username}</div>
         </div>
         <div className="password">
           <div className="label">Password</div>
@@ -107,11 +139,11 @@ componentDidMount(){
         </div>
         <div className="birthday">
           <div className="label">Birthday</div>
-          <div className="value">{this.state.user.Birthday}</div>
+          <div className="value">{moment(user.Birthday).format('DD-MM-YYYY')}</div>
         </div>
         <div className="email">
           <div className="label">Email</div>
-          <div className="value">{this.state.user.Email}</div>
+          <div className="value">{user.Email}</div>
         </div>
         <div className="favoriteMovies">
           <div className="label">Favorite Movies</div>
@@ -128,10 +160,16 @@ componentDidMount(){
         Delete
         </Button>
 
-        <Button variant="primary" type="button" onClick={(event) => this.handleSubmit(event)}>
+        <Button variant="primary" type="button" onClick={this.handleClose}>
           Update my info
         </Button>
-
+        {/* Made a modal popup from react-bootstrap */}
+        <ModalPopUp
+            show={show}
+            toggle={this.handleClose}
+            user={user}
+            change={this.handleChange}
+            submit={this.handleSubmit} />
       </div>
 
     );
