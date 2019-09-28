@@ -14,9 +14,9 @@ export default class ModalPopUp extends React.Component {
     return (
       <Modal show={show} onHide={this.props.toggle}>
          <Modal.Header>
-           <Modal.Title>Modal heading</Modal.Title>
+           <Modal.Title>Update my info</Modal.Title>
          </Modal.Header>
-         <Modal.Body>Woohoo, you're reading this text in a modal!
+         <Modal.Body>Keep things fresh by updating your information below!
              <Form.Group controlId="formGridAddress2">
                <Form.Label>Username</Form.Label>
                <Form.Control name="Username" placeholder="Username" value={user.Username} readOnly />
