@@ -78,7 +78,7 @@ componentDidMount() {
       register: true
     });
     localStorage.removeItem('token');
-    lovalStorgae.removeItem('user');
+    localStorgae.removeItem('user');
     alert("out");
     window.open('/', '_self');
   }
