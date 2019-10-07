@@ -1,9 +1,17 @@
 import React from 'react';
 import axios from 'axios';
 
+import { connect } from 'react-redux';
+
 import './main-view.scss'
 
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
+
+// #0
+import { setMovies } from '../../actions/actions';
+
+//havent written this one yet
+import MoviesList from '../movies-list/movies-list';
 
 import { Container, Row, Navbar, Nav } from 'react-bootstrap';
 import { LoginView } from '../login-view/login-view';
@@ -89,9 +97,10 @@ getMovies(token) {
   })
   .then(response => {
     //Assign result to state
-    this.setState({
-      movies: response.data
-    });
+    // this.setState({
+    //   movies: response.data
+    // #1
+    this.props.setMovies(respone.data);
   })
   .catch(function(error){
     console.log(error);
@@ -121,6 +130,10 @@ register() {
     if (!register) return <RegistrationView onSignedIn={user => this.onSignedIn(user)}/>
     // Before the movies have been loaded
     if (!movies) return <div className="main-view"/>;
+
+    //#2
+    let { movies } = this.props;
+    let { user } = this.state;
 
     return (
       <Router>
@@ -164,6 +177,14 @@ register() {
     );
   }
 }
+
+// #3
+let mapStateToProps = state => {
+  return { movies: state.movies }
+}
+
+// #4
+export default connect(mapStateToProps, {setMovies } )(MainView);
 
 //    <div className="main-view">
 //        <Container>
