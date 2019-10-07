@@ -126,10 +126,10 @@ register() {
     // before the data is initially loaded
     const { movies, selectedMovie, user, register } = this.state;
 
-    if (!user) return <LoginView onClick = {() => this.register()} onLoggedIn={user => this.onLoggedIn(user)}/>
+    // if (!user) return <LoginView onClick = {() => this.register()} onLoggedIn={user => this.onLoggedIn(user)}/>
     if (!register) return <RegistrationView onSignedIn={user => this.onSignedIn(user)}/>
     // Before the movies have been loaded
-    if (!movies) return <div className="main-view"/>;
+    // if (!movies) return <div className="main-view"/>;
 
     //#2
     let { movies } = this.props;
