@@ -124,11 +124,11 @@ register() {
   render() {
     // If the state isn't initialized, this will throw on runtime
     // before the data is initially loaded
-    const { movies, selectedMovie, user, register } = this.state;
-
+    // const { movies, selectedMovie, user, register } = this.state;
+    //
     // if (!user) return <LoginView onClick = {() => this.register()} onLoggedIn={user => this.onLoggedIn(user)}/>
-    if (!register) return <RegistrationView onSignedIn={user => this.onSignedIn(user)}/>
-    // Before the movies have been loaded
+    // if (!register) return <RegistrationView onSignedIn={user => this.onSignedIn(user)}/>
+    // // Before the movies have been loaded
     // if (!movies) return <div className="main-view"/>;
 
     //#2
@@ -154,8 +154,12 @@ register() {
         </section>
         <Container>
           <Switch>
-          <Route exact path="/" render={() => <Row className="mt-5">{movies.map(m => <MovieCard key={m._id} movie={m}/>)}</Row>}/>
-
+          // <Route exact path="/" render={() => <Row className="mt-5">{movies.map(m => <MovieCard key={m._id} movie={m}/>)}</Row>}/>
+          <Route exact path="/" render={() => {
+             if (!user) return <LoginView onLoggedIn={user => this.onLoggedIn(user)} />;
+             return <MoviesList movies={movies}/>;
+         }} />
+         <Route path="/register" render={() => <RegistrationView />} />
           <Route path="/movies/:moviesID" render={({match}) => <MovieView user={this.state.user} movie={movies.find(m => m._id === match.params.moviesID)}/> }/>
 
           <Route path="/directors/:name" render={({match}) => {
