@@ -78,7 +78,7 @@ componentDidMount() {
       register: true
     });
     localStorage.removeItem('token');
-    localStorgae.removeItem('user');
+    localStorage.removeItem('user');
     alert("out");
     window.open('/', '_self');
   }
@@ -144,14 +144,14 @@ register() {
     // before the data is initially loaded
     const { movies, selectedMovie, user, register, profileData } = this.state;
     //
-    // if (!user) return <LoginView onClick = {() => this.register()} onLoggedIn={user => this.onLoggedIn(user)}/>
-    // if (!register) return <RegistrationView onSignedIn={user => this.onSignedIn(user)}/>
+    {/* if (!user) return <LoginView onClick = {() => this.register()} onLoggedIn={user => this.onLoggedIn(user)}/>*/}
+    {/* if (!register) return <RegistrationView onSignedIn={user => this.onSignedIn(user)}/> */}
     // // Before the movies have been loaded
-    // if (!movies) return <div className="main-view"/>;
+    {/*if (!movies) return <div className="main-view"/>;*/}
 
     // //#2
-    // let { movies } = this.props;
-    // let { user } = this.state;
+    {/*let { movies } = this.props;*/}
+    {/*let { user } = this.state;*/}
 
     return (
       <Router>
@@ -173,7 +173,7 @@ register() {
         </section>
         <Container>
           <Switch>
-          // <Route exact path="/" render={() => <Row className="mt-5">{movies.map(m => <MovieCard key={m._id} movie={m}/>)}</Row>}/>
+          {/*<Route exact path="/" render={() => <Row className="mt-5">{movies.map(m => <MovieCard key={m._id} movie={m}/>)}</Row>}/> */}
           <Route exact path="/" render={() => {
              if (!user) return <LoginView onLoggedIn={user => this.onLoggedIn(user)} />;
              return <MoviesList />;
